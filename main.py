@@ -1,3 +1,8 @@
+# 1. Konsep yang ada dalam project ini ada class,objek,polimorpphism,inheritence
+
+
+
+
 # Import the required libraries and modules
 import flet as ft
 from flet import *
@@ -50,8 +55,10 @@ def prompt_style():
 
 #main content area class
 class MainContentArea(ft.Container):
+    # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
     def __init__(self):
         super().__init__(**main_style())
+        # 1. mengambil sifat dari method main_style
         self.chat = ft.ListView(
             expand=True,
             height=200,
@@ -60,8 +67,23 @@ class MainContentArea(ft.Container):
         )
         self.content = self.chat
 
+class MainContentAreaDUAA(MainContentArea):
+    # inheritence diwariskan dari class container yang ada dalam modul flet(external class)                      MEMBUAT POLYMORPHISM
+    def __init__(self):
+        super().__init__(**main_style())
+        # 1. mengambil sifat dari method main_style
+        return {
+        "width": 420,
+        "height": 450,
+        "bgcolor": "#343443",  
+        "border_radius": 10,
+        "padding": 15,
+    }
+
 #Before pushing text to UI - create a class that generates the UI for the actual text prompts
 class CreateMessage(ft.Column):
+    # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
+
     def __init__(self, name: str, message: str):
         self.name = name #show's which prompt is whos
         self.message = message
@@ -71,6 +93,8 @@ class CreateMessage(ft.Column):
 
 # OOP Polimorphism
 class MessageOutput(ft.UserControl):
+    # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
+
     def __init__(self, name: str, chat: ft.ListView):
         self.name = name
         self.chat: ft.ListView = chat
@@ -88,14 +112,17 @@ class MessageOutput(ft.UserControl):
             msg.text.value = "".join(word_list)
             self.chat.update()
             time.sleep(0.008)
+
 class UserOutput(MessageOutput):
     def __init__(self, chat: ft.ListView):
         super().__init__("Me", chat)
 
     def display_output(self, prompt):
         self.animate_text_output(prompt)
+
 class GptOutput(MessageOutput):
     # the following is the basic response to get chat GPT answer
+                                                                                                        # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
     def __init__(self, chat: ft.ListView):
         super().__init__("Agora", chat)
 
@@ -109,6 +136,7 @@ class GptOutput(MessageOutput):
 
 # class running
 class Prompt(ft.TextField):
+                                                                                                    # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
     def __init__(self, chat: ft.ListView, user_output: UserOutput, gpt_output: GptOutput, **kwargs):
         super().__init__(**prompt_style(), on_submit=self.run_prompt, **kwargs)
         self.chat: ft.ListView = chat
@@ -132,11 +160,13 @@ class Prompt(ft.TextField):
 # Class definition for a custom sign-in button in the GUI.
 
 class SignInButton(ft.UserControl):
+                                                                                                        # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
     def __init__(self, btn_name): 
         self.btn_name = btn_name
         super().__init__()
   
     def build(self):
+        #1 build awalnya seprti ini
         return ft.Container(
             content=ft.ElevatedButton(
                 content=ft.Text(
@@ -163,6 +193,7 @@ class SignInButton(ft.UserControl):
 
 #Class for the animation box
 class AnimatedBox(ft.UserControl):
+                                                                                                # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
     def __init__(self, border_color, bg_color, rotate_angle):
         self.border_color = border_color
         self.bg_color = bg_color
@@ -170,6 +201,7 @@ class AnimatedBox(ft.UserControl):
         super().__init__()
 
     def build(self):
+        #1. setelah menggunakan polymorphism mengubah isi dari method build
         return ft.Container(
             width=48,
             height=48,
@@ -182,6 +214,9 @@ class AnimatedBox(ft.UserControl):
 
 # Classes for user input
 class UserInputField(ft.UserControl):
+                                                                                # inheritence diwariskan dari class container yang ada dalam modul flet(external class)
+
+
     def __init__(self, icon_name, text_hint, hide, function_emails: bool, function_check: bool):
         self.icon_name = icon_name
         self.text_hint = text_hint
@@ -292,6 +327,8 @@ class UserInputField(ft.UserControl):
             pass
 
     def build(self):
+                #1. setelah menggunakan polymorphism mengubah isi dari method build
+
         return ft.Container(
             width=320,
             height=40,
@@ -324,6 +361,7 @@ class UserInputField(ft.UserControl):
                 ],
             )
         )
+
 
 
 # Function to display tab1 content
@@ -377,6 +415,7 @@ def tab1_content():
 # Function to display tab2 content
 def tab2_content():
     main_area = MainContentArea()
+                                                                                        # objek main area dibuat dari class  MainContentArea()
     user_output = UserOutput(chat=main_area.chat)
     gpt_output = GptOutput(chat=main_area.chat)
     prompt = Prompt(chat=main_area.chat, user_output=user_output, gpt_output=gpt_output)
